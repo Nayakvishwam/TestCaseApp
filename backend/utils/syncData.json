@@ -1,0 +1,175 @@
+{
+    "priorities": {
+        "model": "priorities",
+        "data": [
+            {
+                "name": "Urgent"
+            },
+            {
+                "name": "Significant"
+            },
+            {
+                "name": "Normal"
+            },
+            {
+                "name": "Minimal"
+            }
+        ]
+    },
+    "projectsmaster": {
+        "model": "projectsmaster",
+        "data": [
+            {
+                "name": "Test project jira"
+            },
+            {
+                "name": "Learn TCM"
+            }
+        ]
+    },
+    "modules": {
+        "model": "modules",
+        "data": [
+            {
+                "name": "Cases"
+            },
+            {
+                "name": "Sets"
+            },
+            {
+                "name": "Cycles"
+            },
+            {
+                "name": "All"
+            }
+        ]
+    },
+    "folders": {
+        "model": "foldersmaster",
+        "depends": {
+            "model": "modules",
+            "value": "All",
+            "column": "name",
+            "attributes": [
+                [
+                    "id",
+                    "moduleId"
+                ]
+            ],
+            "entity": {
+                "id": null
+            }
+        },
+        "data": [
+            {
+                "name": "Not Assigned"
+            },
+            {
+                "name": "All"
+            }
+        ]
+    },
+    "tags": {
+        "model": "tags",
+        "data": [
+            {
+                "name": "Test"
+            },
+            {
+                "name": "TestData"
+            },
+            {
+                "name": "TestRecord"
+            }
+        ]
+    },
+    "casestemplates": {
+        "model": "casestemplates",
+        "data": [
+            {
+                "name": "Content"
+            },
+            {
+                "name": "Instructions"
+            }
+        ]
+    },
+    "casestypes": {
+        "model": "casestypes",
+        "data": [
+            {
+                "name": "Other"
+            },
+            {
+                "name": "Acceptance"
+            },
+            {
+                "name": "Accessibility"
+            },
+            {
+                "name": "Compatibility"
+            },
+            {
+                "name": "Destructive"
+            },
+            {
+                "name": "Functional"
+            },
+            {
+                "name": "Performance"
+            },
+            {
+                "name": "Regression"
+            },
+            {
+                "name": "Security"
+            },
+            {
+                "name": "Smoke & Sanity"
+            },
+            {
+                "name": "Usability"
+            }
+        ]
+    },
+    "status": {
+        "model": "casesstatus",
+        "data": [
+            {
+                "name": "Ongoing"
+            },
+            {
+                "name": "Pending"
+            },
+            {
+                "name": "Awaiting Approval"
+            },
+            {
+                "name": "Expired"
+            },
+            {
+                "name": "Declined"
+            }
+        ]
+    },
+    "autostatus": {
+        "model": "casesautomatestatus",
+        "data": [
+            {
+                "name": "Manual"
+            },
+            {
+                "name": "System-Driven"
+            },
+            {
+                "name": "Manual Process Preferred"
+            },
+            {
+                "name": "Requires Manual Execution"
+            },
+            {
+                "name": "Outdated"
+            }
+        ]
+    }
+}

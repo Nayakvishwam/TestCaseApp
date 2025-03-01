@@ -1,0 +1,25 @@
+{
+    "caseEntity": {
+        "title": null,
+        "description": null,
+        "preconditions": null,
+        "key": null,
+        "step": null,
+        "result": null,
+        "ownerId": null,
+        "autocasestatusId": null,
+        "projectId": null,
+        "folderId": null,
+        "priorityId": null,
+        "statusId": null,
+        "casetemplateId": null,
+        "typeId": null,
+        "estimatedHourses": null
+    },
+    "caseSetEntity": {
+        "title": null,
+        "description": null,
+        "folderId": null,
+        "ownerId": null
+    }
+}
