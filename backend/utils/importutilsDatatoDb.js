@@ -1,6 +1,7 @@
 const { models } = require('../config/db');
 const fs = require('fs');
 const path = require('path');
+const { syncData } = require('./SyncData');
 const Country = models.countries;
 const State = models.state;
 
@@ -35,10 +36,10 @@ async function statesCountries() {
     } finally {
         console.log("Script execute done 100%")
     }
-}
+};
 async function importData() {
+    await syncData();
     await statesCountries();
-}
+};
 
-// Run import script
 importData();
