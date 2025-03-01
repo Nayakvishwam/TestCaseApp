@@ -8,19 +8,11 @@ async function createCase(req, res) {
     let result = utils.getResult();
     try {
         let caseData = req.body;
-        let { taglines, files } = req.body;
+        let { taglines, files, stages } = req.body;
         let data = await getModelEntity('caseEntity');
-        let folderId = await models.foldersmaster.findOne({
-            where: {
-                name: defaultFolders[1]
-            },
-            attributes: ['id'],
-            raw: true
-        });
         data = {
             ...data,
-            ...caseData,
-            ...{ folderId: folderId.id }
+            ...caseData
         };
         data = await models.casesmaster.create(data);
         data = data.toJSON();
@@ -34,6 +26,12 @@ async function createCase(req, res) {
         });
         if (taglines?.length > 0) {
             await manageOneToManyLines('caseId', taglines, data.id, 'casestagslines', 'tagId');
+        };
+        if (stages?.length > 0) {
+            stages = stages?.map(stage => {
+                return { ...stage, caseId: data.id };
+            })
+            await models.stage_result.bulkCreate(stages);
         };
         if (files?.length > 0) {
             for (let file of files) {
@@ -72,8 +70,15 @@ async function deleteCases(req, res) {
                 status_code: 404,
                 message: "Some test cases not found."
             });
-        }
+        };
         await models.casestagslines.destroy({
+            where: {
+                caseId: {
+                    [Op.in]: caseIds
+                }
+            }
+        });
+        await models.stage_result.destroy({
             where: {
                 caseId: {
                     [Op.in]: caseIds
@@ -106,7 +111,7 @@ async function updateCase(req, res) {
     try {
         let caseId = req.params.id;
         let caseData = req.body;
-        let { taglines, files } = req.body;
+        let { taglines, files, unlinkstageIds, stages } = req.body;
         let existingCase = await models.casesmaster.count({ where: { id: caseId } });
         if (existingCase < 1) {
             let response = getApiResponse('ERROR_404');
@@ -118,6 +123,7 @@ async function updateCase(req, res) {
             where: { id: caseId }
         });
         if (taglines?.length > 0) {
+            console.log(taglines);
             await models.casestagslines.destroy({
                 where: {
                     caseId
@@ -134,12 +140,28 @@ async function updateCase(req, res) {
                 await fileManager.createNewDir(defaultLocation);
                 fileManager.writeFile(`${defaultLocation}/${file.fileName}.${file.fileExt}`, fileData);
             }
+        };
+        if (stages?.length > 0) {
+            stages = stages?.map(stage => {
+                return { ...stage, caseId };
+            })
+            await models.stage_result.bulkCreate(stages);
         }
+        if (unlinkstageIds?.length>0) {                
+            await models.stage_result.destroy({
+                where: {
+                    id: {
+                        [Op.in]: unlinkstageIds
+                    }
+                }
+            });
+        };
         let response = getApiResponse('SUCCESS_200');
         result.status_code = response.statusCode;
         result.message = "Test case updated successfully.";
         sendSuccessResponse(res, result);
     } catch (error) {
+        console.log(error);
         let response = getApiResponse('ERROR_500');
         result.status_code = response.statusCode;
         result.message = response.message;
@@ -167,6 +189,12 @@ async function getCase(req, res) {
                     as: "casestagslines",
                     attributes: {
                         exclude: ['updatedAt', 'createdAt', 'id', 'caseId']
+                    }
+                }, {
+                    model: models.stage_result,
+                    as: "stagescaselines",
+                    attributes: {
+                        exclude: ['updatedAt', 'createdAt']
                     }
                 }]
         });

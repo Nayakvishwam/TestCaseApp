@@ -1,12 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('casestagslines', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
     caseId: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -34,13 +28,6 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: true,
     indexes: [
       {
-        name: "casestagslines_pkey",
-        unique: true,
-        fields: [
-          { name: "id" },
-        ]
-      },
-      {
         name: "unique_case_tag",
         unique: true,
         fields: [
@@ -48,6 +35,7 @@ module.exports = function(sequelize, DataTypes) {
           { name: "tag_id" },
         ]
       },
-    ]
+    ],
+    primaryKey: false, // Ensure no auto-generated primary key
   });
 };

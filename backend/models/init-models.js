@@ -17,6 +17,7 @@ var _countries = require("./countries");
 var _casestypecases = require("./casestypes");
 var _casestemplates = require("./casestemplates");
 var _casesautomatestatus = require("./casesautomatestatus");
+var _stage_result = require("./stage_result");
 
 function initModels(sequelize) {
   var priorities = _priorities(sequelize, DataTypes);
@@ -37,11 +38,16 @@ function initModels(sequelize) {
   var companiesmaster = _companiesmaster(sequelize, DataTypes);
   var countries = _countries(sequelize, DataTypes);
   var state = _state(sequelize, DataTypes);
+  var stage_result = _stage_result(sequelize, DataTypes);
+
+  casestagslines.removeAttribute('id');
 
   casesmaster.belongsTo(casesautomatestatus, { as: "autocasestatus", foreignKey: "autocasestatusId" });
   casesautomatestatus.hasOne(casesmaster, { as: "casesmasters", foreignKey: "autocasestatusId" });
   casestagslines.belongsTo(casesmaster, { as: "case", foreignKey: "caseId" });
   casesmaster.hasMany(casestagslines, { as: "casestagslines", foreignKey: "caseId" });
+  stage_result.belongsTo(casesmaster, { as: "case", foreignKey: "caseId" });
+  casesmaster.hasMany(stage_result, { as: "stagescaselines", foreignKey: "caseId" });
   casesmaster.belongsTo(foldersmaster, { as: "folderscase", foreignKey: "folderId" });
   foldersmaster.hasOne(casesmaster, { as: "casesfolders", foreignKey: "folderId" });
   casesmaster.belongsTo(casestemplates, { as: "cases", foreignKey: "casetemplateId" });
@@ -68,13 +74,13 @@ function initModels(sequelize) {
   setcaseslines.hasMany(setsmaster, { foreignKey: 'setId', as: 'cases' });
   setcaseslines.belongsTo(casesmaster, { foreignKey: 'caseId', as: 'case' });
   setcaseslines.belongsTo(setsmaster, { foreignKey: 'setId', as: 'set' });
-
   state.belongsTo(countries, { as: "country", foreignKey: "countryId" });
   countries.hasMany(state, { as: "statesList", foreignKey: "countryId" });
   countries.belongsTo(companiesmaster, { as: "companiescountry", foreignKey: "countryId" });
   companiesmaster.hasMany(countries, { as: "cuntriescompany", foreignKey: "countryId" });
   state.belongsTo(companiesmaster, { as: "companiesState", foreignKey: "stateId" });
   companiesmaster.hasMany(state, { as: "statesCompanies", foreignKey: "stateId" });
+
   return {
     priorities,
     tags,
@@ -93,7 +99,8 @@ function initModels(sequelize) {
     state,
     countries,
     casestypecases,
-    casestemplates
+    casestemplates,
+    stage_result
   };
 }
 

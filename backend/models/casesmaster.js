@@ -23,14 +23,6 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       unique: true
     },
-    step: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    result: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
     ownerId: {
       type: DataTypes.BIGINT,
       allowNull: false,

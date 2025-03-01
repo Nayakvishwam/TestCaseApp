@@ -14,6 +14,21 @@ const getValidator = ({ update }) => {
         body('files.*.fileName').optional().isString().notEmpty().withMessage('File name must be a non-empty string'),
         body('files.*.fileExt').optional().isString().notEmpty().withMessage('File extension must be a non-empty string'),
 
+        body("stages").optional()
+            .isArray({ min: 1 })
+            .withMessage("Stages must be a non-empty array"),
+
+        body("stages.*.step")
+            .optional()
+            .isString()
+            .withMessage("Step must be a string if provided"),
+
+        body("stages.*.result")
+            .optional()
+            .isString()
+            .withMessage("Result must be a string if provided"),
+
+
         body('description')
             .optional()
             .isString().withMessage('Description must be a string'),
@@ -71,6 +86,11 @@ const getValidator = ({ update }) => {
             param('id').isInt().withMessage('ID must be an integer')
                 .notEmpty().withMessage('ID is required')
         );
+        validators = validators.concat([       
+        body("unlinkstageIds").optional()
+            .isArray({ min: 1 })
+            .withMessage("unlinkstageIds must be a non-empty array"),
+        ])
     };
     return validators;
 };
