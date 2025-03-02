@@ -85,12 +85,31 @@ async function getAutomationStatus(req, res) {
 };
 
 async function getTags(req, res) {
+    let result = utils.getResult();
     try {
         const data = await models.tags.findAll();
         let response = getApiResponse('ERROR_200');
         result.status_code = response.statusCode;
         result.message = response.message;
         result.data = data;
+        sendSuccessResponse(res, result);
+    } catch (error) {
+        let response = getApiResponse('ERROR_500');
+        result.status_code = response.statusCode;
+        result.message = response.message;
+        sendErrorResponse(res, result);
+    }
+}
+
+async function getProjects(req, res) {
+    let result = utils.getResult();
+    try {
+        const data = await models.projectsmaster.findAll();
+        let response = getApiResponse('ERROR_200');
+        result.status_code = response.statusCode;
+        result.message = response.message;
+        result.data = data;
+        sendSuccessResponse(res, result);
     } catch (error) {
         let response = getApiResponse('ERROR_500');
         result.status_code = response.statusCode;
@@ -104,5 +123,6 @@ module.exports = {
     getTags,
     getPriorities,
     getTemplates,
-    getTestCases
+    getTestCases,
+    getProjects
 };

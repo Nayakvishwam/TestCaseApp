@@ -37,14 +37,6 @@ const getValidator = ({ update }) => {
             .optional()
             .isString().withMessage('Preconditions must be a string'),
 
-        body('step')
-            .isString().withMessage('Step must be a string')
-            .notEmpty().withMessage('Step is required'),
-
-        body('result')
-            .isString().withMessage('Result must be a string')
-            .notEmpty().withMessage('Result is required'),
-
         body('ownerId')
             .isInt().withMessage('Owner ID must be an integer')
             .notEmpty().withMessage('Owner ID is required'),
@@ -58,7 +50,6 @@ const getValidator = ({ update }) => {
             .notEmpty().withMessage('Project ID is required'),
 
         body('folderId')
-            .optional()
             .isInt().withMessage('Folder ID must be an integer'),
 
         body('priorityId')

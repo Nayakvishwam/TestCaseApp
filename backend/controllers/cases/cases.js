@@ -147,7 +147,7 @@ async function updateCase(req, res) {
             })
             await models.stage_result.bulkCreate(stages);
         }
-        if (unlinkstageIds?.length>0) {                
+        if (unlinkstageIds?.length > 0) {
             await models.stage_result.destroy({
                 where: {
                     id: {
@@ -236,10 +236,22 @@ async function getCases(req, res) {
         let offset = (page - 1) * totalRecords;
         let limit = totalRecords;
         let { count, rows } = await models.casesmaster.findAndCountAll({
-            raw: true,
             where: filters,
+            raw: true,
             limit,
-            offset
+            offset,
+            include: [
+                { model: models.casesautomatestatus, as: "autocasestatus" },
+                { model: models.casesstatus, as: "status" },
+                { model: models.casestypes, as: "type" },
+                { model: models.casestemplates, as: "cases" },
+                { model: models.priorities, as: "priority" },
+                { model: models.projectsmaster, as: "project" },
+                {
+                    model: models.foldersmaster, as: "folderscase", attributes: {
+                        exclude: ['updatedAt', 'createdAt', 'moduleId']
+                    }
+                }]
         });
         result.data = {
             totalRecords,

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;
+    /* Hide scrollbar for Firefox */
+}
+
+.folder {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.file::before {
+    content: "📄 ";
+}
+
+.hidden {
+    display: none;
+}
